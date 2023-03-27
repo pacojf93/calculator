@@ -1,0 +1,46 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 20px;
+    gap: 20px;
+}
+
+.display {
+    display: flex;
+    flex: 1;
+}
+
+.keyboard {
+    display: flex;
+    flex: 1;
+}
+
+.numbers {
+    display: flex;
+    flex-direction: column;
+}
+
+.number-row {
+    display: flex;
+}
+
+.number {
+    flex: 1;
+}
+
+.zero {
+    flex-grow: 2;
+}
+
+.decimal {
+    flex-grow: 1;
+}
+
+.operators {
+    display: flex;
+    flex-direction: column;
+}
+
