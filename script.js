@@ -3,8 +3,11 @@ const display = document.querySelector(".display")
 const numberButtons = document.querySelectorAll(".number")
 const operatorButtons = document.querySelectorAll(".operator")
 const ceButton = document.querySelector("#ce")
+const delButton = document.querySelector("#del")
+const decimalButton = document.querySelector(".decimal")
 
 let eraseDisplay = true
+let isDecimal = false
 let buffer = []
 
 const numpadClickHandler = function (e) {
@@ -35,7 +38,7 @@ const operatorsClickHandler = function (e) {
                 buffer.unshift(result)
             }
 
-            display.textContent = buffer[0]
+            display.textContent = Math.round(Number(buffer[0]))
             buffer = []
     }
 
@@ -55,6 +58,14 @@ const operate = function(a, operator, b) {
     }
 }
 
+const decimalClickHandler = function (e) {
+    if(!display.textContent.includes(".")) {
+        display.textContent += "."        
+    }
+
+    console.log(!display.textContent.search("."))
+}
+
 numberButtons.forEach(number => {
     number.addEventListener('click', numpadClickHandler)
 })
@@ -64,7 +75,18 @@ ceButton.addEventListener('click', function() {
     buffer = 0
 })
 
+delButton.addEventListener('click', function() {
+    if(display.textContent !== "0") {
+        display.textContent = display.textContent.slice(0, -1)
+    }
+    if (display.textContent.length === 0) {
+        display.textContent = "0"
+    }
+})
+
 operatorButtons.forEach(operator => {
     operator.addEventListener('click', operatorsClickHandler)
 })
+
+decimalButton.addEventListener('click', decimalClickHandler)
 
