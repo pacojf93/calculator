@@ -1,4 +1,3 @@
-
 const display = document.querySelector(".display")
 const numberButtons = document.querySelectorAll(".number")
 const operatorButtons = document.querySelectorAll(".operator")
@@ -7,13 +6,23 @@ const delButton = document.querySelector("#del")
 const decimalButton = document.querySelector(".decimal")
 
 let eraseDisplay = true
-let isDecimal = false
 let buffer = []
 
+let operations = {
+    '+': function(a,b) { return a + b },
+    '-': function(a,b) { return a - b },
+    '*': function(a,b) { return a * b },
+    '/': function(a,b) { return a / b },
+}
+
+/*Handlers and functions*/ 
 const numpadClickHandler = function (e) {
-    if ( display.textContent === "0" | eraseDisplay) {
+    if ( display.textContent === "0" || eraseDisplay) {
         display.textContent = e.target.id
         eraseDisplay = false
+    }
+    else if ( display.textContent.replace(".","").length > 7 ) {
+        return
     }
     else {
         display.textContent += e.target.id
@@ -21,9 +30,10 @@ const numpadClickHandler = function (e) {
 }
 
 const operatorsClickHandler = function (e) {
-
     buffer.push(display.textContent)
     eraseDisplay = true
+
+    console.log("operatorsClickHandler called with buffer: " + buffer)
 
     switch(e.target.id){
         case "+":
@@ -33,53 +43,55 @@ const operatorsClickHandler = function (e) {
             buffer.push(e.target.id)
             break
         case "=":
-            while(buffer.length > 1) {
-                let result = operate(buffer.shift(),buffer.shift(),buffer.shift())
-                buffer.unshift(result)
+            let result = (1 * operate(buffer).toFixed(7)).toString()
+            if( result.replace(".","").length > 7 ) {
+                display.textContent = "OL"
             }
-
-            display.textContent = Math.round(Number(buffer[0]))
+            else {
+                display.textContent = result
+            }
             buffer = []
     }
 
-    console.log(buffer)
+    console.log("operatorsClickHander exited with buffer: " + buffer)
 }
 
-const operate = function(a, operator, b) {
-    switch(operator) {
-        case "+":
-            return Number(a) + Number(b)
-        case "-":
-            return Number(a) - Number(b)
-        case "*":
-            return Number(a) * Number(b)
-        case "/":
-            return Number(a) / Number(b)        
+const operate = function(buffer) {
+    
+    let lhs = Number(buffer[0])    
+
+    if( buffer.length > 1 ) {
+        let operand = buffer[1]
+        let rhs = buffer.slice(2)
+        return operations[operand](lhs, operate(rhs))
     }
-}
-
-const decimalClickHandler = function (e) {
-    if(!display.textContent.includes(".")) {
-        display.textContent += "."        
+    else {
+        return lhs
     }
 
-    console.log(!display.textContent.search("."))
 }
 
+
+/*Event listeners*/
 numberButtons.forEach(number => {
     number.addEventListener('click', numpadClickHandler)
 })
 
+decimalButton.addEventListener('click', function() {
+    if(!display.textContent.includes(".")) {
+        display.textContent += "."        
+    }
+})
+
 ceButton.addEventListener('click', function() {
     display.textContent = "0"
-    buffer = 0
 })
 
 delButton.addEventListener('click', function() {
-    if(display.textContent !== "0") {
+    if(display.textContent !== "0" && display.textContent !== "OL") {
         display.textContent = display.textContent.slice(0, -1)
     }
-    if (display.textContent.length === 0) {
+    if (display.textContent.length === 0 || display.textContent === "OL") {
         display.textContent = "0"
     }
 })
@@ -88,5 +100,5 @@ operatorButtons.forEach(operator => {
     operator.addEventListener('click', operatorsClickHandler)
 })
 
-decimalButton.addEventListener('click', decimalClickHandler)
+
 

@@ -1,11 +1,11 @@
 * {
     font-family: Roboto;
+    /*border: 2px solid red;*/
 }
 
 body {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin: 0;
     padding: 2px;
@@ -14,11 +14,28 @@ body {
     background-color: black;
 }
 
-.display {
+.wrapper {
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    padding: 2px;
+    gap: 2px;
+    border: 2px solid white;
+}
+
+.display {
+    text-align: right;
+}
+
+.display,
+button {
+    /*align-self: flex-end;*/
     color: white;
+    background-color: black;
     font-size: 36px;
+    border: 2px solid white;
+    margin: 2px;
+    padding: 2px 10px;
+    border-radius: 4px;
 }
 
 .keyboard {
@@ -31,6 +48,11 @@ body {
     flex-direction: column;
 }
 
+#ce,
+#del {
+    flex: 1;
+}
+
 .number-row {
     display: flex;
 }
@@ -40,7 +62,7 @@ body {
 }
 
 .zero {
-    flex-grow: 2;
+    flex-grow: 4;
 }
 
 .decimal {
@@ -52,15 +74,8 @@ body {
     flex-direction: column;
 }
 
-
-.number,
-.decimal,
 .operator {
-    color: white;
-    background-color: black;
-    border: solid 1px white;
-    border-radius: 2px;
-    margin: 2px;
-    font-size: 36px;
+    flex: 1;
+    background-color: white;
+    color: black;
 }
-
